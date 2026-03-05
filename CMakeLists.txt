@@ -5,5 +5,19 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(miniscript
+        # headers
+        src/miniscript/Lexer.h
+        src/miniscript/Token.h
+        src/miniscript/Trie.h
+        src/miniscript/Word.h
+
+        # impl
+        src/miniscript/Lexer.cpp
+        src/miniscript/Token.cpp
+        src/miniscript/Trie.cpp
+        src/miniscript/Word.cpp
+
         src/main.cpp
 )
+
+target_include_directories(miniscript PRIVATE src)
