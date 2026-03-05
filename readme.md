@@ -13,7 +13,6 @@ Built from the ground up using **C++23**, the interpreter leverages modern syste
   * **JS-inspired:** Dynamic typing and intuitive Object/Array literals.
   * **Lua-inspired:** Minimalist keywords (like `ret`) and lightweight footprint.
   * **C++-inspired:** Block scoping, explicit operators (`--`, `*=`), and familiar control flow.
-
 * **Expression-Bodied Functions:** Concise single-line function definitions using `=`.
 * **Native Interpolation:** Evaluate logic directly inside strings using `{expression}`.
 
@@ -25,15 +24,16 @@ Built from the ground up using **C++23**, the interpreter leverages modern syste
 
 Miniscript supports rich, nested data structures with a simple `let` syntax.
 
-```rust
-let _ = true
+```
+let is_active = true
 let count = 42
 let message = "Hello, Miniscript"
 let list = [1, 2, 3]
 let user = {
     "id": 101,
-    "active": true,
-    "roles": ["admin", "editor"]
+    "active": is_active,
+    "roles": ["admin", "editor"],
+    "message": message
 }
 
 ```
@@ -42,8 +42,8 @@ let user = {
 
 Familiar C-style logic meets streamlined returns.
 
-```cpp
-// Traditional block function
+```
+# Traditional block function
 func power(a, b) {
     let value = a
     while(b > 1) {
@@ -53,7 +53,7 @@ func power(a, b) {
     ret value
 }
 
-// Expression-bodied function
+# Expression-bodied function
 func square(n) = n * n
 
 func main() {
@@ -64,17 +64,19 @@ func main() {
 
 ```
 
+See files in examples folder to know more
+
 ---
 
 ## 📊 How It Compares
 
-| Feature | **Miniscript** | JavaScript | C++ | Lua |
-| --- | --- | --- | --- | --- |
-| **Declaration** | `let x = 5` | `let x = 5` | `int x = 5;` | `local x = 5` |
-| **Return** | `ret x` | `return x;` | `return x;` | `return x` |
-| **Function** | `func f() {}` | `function f() {}` | `void f() {}` | `function f() end` |
-| **Decrement** | `x--` | `x--` | `x--` | `x = x - 1` |
-| **Interpolation** | `"{x}"` | ``${x}`` | `std::format` | `".." .. x` |
+| Feature           | **Miniscript** | JavaScript        | C++           | Lua                |
+|-------------------|----------------|-------------------|---------------|--------------------|
+| **Declaration**   | `let x = 5`    | `let x = 5`       | `int x = 5;`  | `local x = 5`      |
+| **Return**        | `ret x`        | `return x;`       | `return x;`   | `return x`         |
+| **Function**      | `func f() {}`  | `function f() {}` | `void f() {}` | `function f() end` |
+| **Decrement**     | `x--`          | `x--`             | `x--`         | `x = x - 1`        |
+| **Interpolation** | `"{x}"`        | ``${x}``          | `std::format` | `".." .. x`        |
 
 ---
 
@@ -93,13 +95,13 @@ Miniscript isn't just a script; it’s a showcase of modern C++ capabilities:
 ### Prerequisites
 
 * **Compiler:** GCC 13+, Clang 16+, or MSVC 19.35+
-* **Build Tool:** CMake 3.25+
+* **Build Tool:** CMake 4.0+
 
 ### Installation
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/miniscript.git
+git clone https://github.com/makuta-dev/miniscript.git
 cd miniscript
 
 # Build
