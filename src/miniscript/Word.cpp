@@ -88,11 +88,6 @@ namespace miniscript {
             case Word::RotLAssign:         return "<<<=";
             case Word::RotRAssign:         return ">>>=";
 
-                // --- Special ---
-            case Word::Arrow:              return "=>";
-            case Word::InterpolationStart: return "INTERP_START";
-            case Word::InterpolationEnd:   return "INTERP_END";
-
             default: return "INVALID_TOKEN";
         }
     }

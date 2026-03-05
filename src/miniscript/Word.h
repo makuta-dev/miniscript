@@ -91,11 +91,6 @@ namespace miniscript {
         RShiftAssign,   // >>=
         RotLAssign,     // <<<=
         RotRAssign,     // >>>=
-
-        // --- Special Syntax ---
-        Arrow,              // ->
-        InterpolationStart, // Found inside string: " ... {
-        InterpolationEnd,   // Found inside string: } ... "
     };
 
     std::string to_string(Word w);

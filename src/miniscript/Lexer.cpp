@@ -70,8 +70,7 @@ namespace miniscript {
             advance(); // opening "
             const size_t start = m_index;
             while (peek() != '"' && !is_at_end()) {
-                if (peek() == '{') return {Word::InterpolationStart, "{", m_line, m_column};
-                advance();
+                 advance();
             }
             const std::string_view val = m_input.substr(start, m_index - start);
             if (peek() == '"') advance(); // closing "

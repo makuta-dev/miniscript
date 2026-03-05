@@ -18,6 +18,8 @@ add_executable(miniscript
         src/miniscript/Word.cpp
 
         src/main.cpp
+        src/miniscript/ASTree.h
+        src/miniscript/Visitor.h
 )
 
 target_include_directories(miniscript PRIVATE src)
