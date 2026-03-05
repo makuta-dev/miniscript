@@ -166,6 +166,14 @@ namespace miniscript {
         }
     };
 
+    struct ImportNode : ASTNode {
+        std::string path;
+
+        void accept(Visitor& v) override {
+            v.visit(*this);
+        }
+    };
+
 }
 
 #endif //MINISCRIPT_ASTREE_H

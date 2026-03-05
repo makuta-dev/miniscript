@@ -29,9 +29,7 @@ std::expected<std::string, std::string> read_file(const std::string& path) {
 void run(const std::string_view source) {
     miniscript::Lexer lexer(source);
     const auto tokens = lexer.tokenize();
-    for (const auto& token : tokens) {
-        std::cout << token << std::endl;
-    }
+    // ... (-_-)
 }
 
 void run_repl() {

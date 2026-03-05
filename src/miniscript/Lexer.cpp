@@ -98,7 +98,7 @@ namespace miniscript {
     void Lexer::skip_whitespace_and_comments() {
         while (!is_at_end()) {
             if (const char c = peek(); std::isspace(c)) advance();
-            else if (c == '/' && peek_next() == '/') {
+            else if ((c == '/' && peek_next() == '/') || c == '#') {
                 while (peek() != '\n' && !is_at_end()) advance();
             } else break;
         }

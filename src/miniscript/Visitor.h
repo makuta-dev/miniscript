@@ -3,6 +3,8 @@
 
 namespace miniscript {
 
+    struct ImportNode;
+
     struct LiteralNode;
     struct ArrayLiteralNode;
     struct DictLiteralNode;
@@ -43,6 +45,7 @@ namespace miniscript {
         virtual void visit(const ContinueNode&) = 0;
         virtual void visit(const IndexNode&) = 0;
         virtual void visit(const BlockNode&) = 0;
+        virtual void visit(const ImportNode&) = 0;
     };
 
 }
