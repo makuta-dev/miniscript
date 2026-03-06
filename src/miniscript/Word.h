@@ -24,6 +24,7 @@ namespace miniscript {
         True,           // true
         False,          // false
         Null,           // null
+        In,             // in
 
         // --- Literals & Identifiers ---
         Identifier,     // e.g., myVariable
@@ -41,7 +42,6 @@ namespace miniscript {
         Comma,          // ,
         Colon,          // :
         Dot,            // .
-        Semicolon,      // ;
 
         // --- Basic Arithmetic ---
         Plus,           // +

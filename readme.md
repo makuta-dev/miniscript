@@ -85,7 +85,7 @@ See files in examples folder to know more
 Miniscript isn't just a script; it’s a showcase of modern C++ capabilities:
 
 * **Zero-Copy Lexing:** Uses `std::string_view` to tokenize without unnecessary allocations.
-* **Type-Safe Values:** The internal `Value` system is powered by `std::variant`, providing speed without the dangers of raw pointers or unions.
+* **Type-Safe Values:** The internal `Value` system is designed using OOP patterns, providing flexible type system that can be easily extended.
 * **Functional Error Handling:** Uses `std::expected` to propagate parser and runtime errors without the overhead of exceptions.
 
 ---

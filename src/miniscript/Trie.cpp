@@ -12,7 +12,6 @@ namespace miniscript {
         insert(",",Word::Comma);
         insert(":",Word::Colon);
         insert(".",Word::Dot);
-        insert(";",Word::Semicolon);
         insert("+",Word::Plus);
         insert("-",Word::Minus);
         insert("*",Word::Asterisk);

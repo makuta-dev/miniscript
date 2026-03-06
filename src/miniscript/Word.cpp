@@ -22,6 +22,7 @@ namespace miniscript {
             case Word::True:               return "true";
             case Word::False:              return "false";
             case Word::Null:               return "null";
+            case Word::In:                 return "in";
 
                 // --- Literals ---
             case Word::Identifier:         return "IDENTIFIER";
@@ -39,7 +40,6 @@ namespace miniscript {
             case Word::Comma:              return ",";
             case Word::Colon:              return ":";
             case Word::Dot:                return ".";
-            case Word::Semicolon:          return ";";
 
                 // --- Operators ---
             case Word::Plus:               return "+";

@@ -16,6 +16,7 @@ namespace miniscript {
         {"true",    Word::True},
         {"false",   Word::False},
         {"null",    Word::Null},
+        {"in",      Word::In},
     };
 
     Lexer::Lexer(const std::string_view input) : m_input(input) {}

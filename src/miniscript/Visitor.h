@@ -24,6 +24,7 @@ namespace miniscript {
     struct IndexNode;
     struct BreakNode;
     struct ContinueNode;
+    struct IfNode;
 
     struct Visitor {
         virtual ~Visitor() = default;
@@ -46,6 +47,7 @@ namespace miniscript {
         virtual void visit(const IndexNode&) = 0;
         virtual void visit(const BlockNode&) = 0;
         virtual void visit(const ImportNode&) = 0;
+        virtual void visit(const IfNode&) = 0;
     };
 
 }

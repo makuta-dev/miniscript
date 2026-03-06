@@ -2,6 +2,7 @@
 #define MINISCRIPT_ASTREE_H
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "miniscript/Token.h"
@@ -19,8 +20,15 @@ namespace miniscript {
     using NodeVec = std::vector<NodePtr>;
     using NodePair = std::pair<NodePtr,NodePtr>;
 
+    template <typename T, typename... Args>
+    std::unique_ptr<T> node(Args&&... args) {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
+
     struct LiteralNode : ASTNode {
         Token token;
+
+        explicit LiteralNode(Token t) : token(std::move(t)) {}
 
         void accept(Visitor& v) override {
             v.visit(*this);
@@ -82,7 +90,7 @@ namespace miniscript {
     };
 
     struct UnaryNode : ASTNode {
-        Word op;
+        Word op = Word::UNKNOWN;
         NodePtr operand;
 
         void accept(Visitor& v) override {
@@ -108,6 +116,16 @@ namespace miniscript {
         }
     };
 
+    struct IfNode : ASTNode {
+        NodePtr condition;
+        NodePtr thenBody;
+        NodePtr elseBody;
+
+        void accept(Visitor& v) override {
+            v.visit(*this);
+        }
+    };
+
     struct WhileNode : ASTNode {
         NodePtr condition;
         NodePtr body;
@@ -119,9 +137,8 @@ namespace miniscript {
     };
 
     struct ForNode : ASTNode {
-        NodePtr variable;
-        NodePtr condition;
-        NodePtr increment;
+        std::string iterator_name;
+        NodePtr collection;
         NodePtr body;
 
         void accept(Visitor& v) override {

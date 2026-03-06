@@ -5,7 +5,9 @@
 #include <vector>
 #include <print>
 
+#include "miniscript/Interpreter.h"
 #include "miniscript/Lexer.h"
+#include "miniscript/Parser.h"
 
 std::expected<std::string, std::string> read_file(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -28,8 +30,13 @@ std::expected<std::string, std::string> read_file(const std::string& path) {
 
 void run(const std::string_view source) {
     miniscript::Lexer lexer(source);
-    const auto tokens = lexer.tokenize();
-    // ... (-_-)
+    auto parser = miniscript::Parser(lexer.tokenize());
+    if (const auto program = parser.parse()){
+        auto interpreter = miniscript::Interpreter();
+        program->accept(interpreter);
+    }else {
+        std::println(std::cerr, "NullPointer received");
+    }
 }
 
 void run_repl() {
