@@ -1,5 +1,8 @@
 #include "miniscript/Value.h"
 
+#include <sstream>
+#include <utility>
+
 namespace miniscript {
     ValueType NullValue::getType() const {
         return ValueType::Null;
@@ -153,6 +156,185 @@ namespace miniscript {
     }
 
     double RealValue::getValue() const {
+        return m_value;
+    }
+
+    // #########################################################
+
+    StrValue::StrValue(std::string value) : m_value(std::move(value)) {}
+
+    ValueType StrValue::getType() const {
+        return ValueType::String;
+    }
+
+    std::string StrValue::toString() const {
+        return m_value;
+    }
+
+    std::size_t StrValue::hash() const {
+        return std::hash<std::string>{}(m_value);
+    }
+
+    bool StrValue::equals(const ValuePtr &other) const {
+        if (!other) {
+            return false;
+        }
+        if (getType() == other->getType()) {
+            return m_value == dynamic_cast<StrValue*>(other.get())->getValue();
+        }
+        return false;
+    }
+
+    bool StrValue::isTruthy() const {
+        return !m_value.empty();
+    }
+
+    ValuePtr StrValue::at(const ValuePtr& index) const {
+        if (!index) {
+            return nullptr;
+        }
+        if (index->getType() == ValueType::Integer) {
+            const auto i = dynamic_cast<const IntValue*>(index.get())->getValue();
+            if (!m_value.empty() && i < m_value.length()) {
+                return std::make_shared<CharValue>(m_value[i]);
+            }
+            return std::make_shared<NullValue>();
+        }
+        return nullptr;
+    }
+
+    std::string StrValue::getValue() const {
+        return m_value;
+    }
+
+    // #########################################################
+
+    ArrValue::ArrValue(std::vector<ValuePtr> value) : m_value(std::move(value)) {}
+
+    ValueType ArrValue::getType() const {
+        return ValueType::Array;
+    }
+
+    std::string ArrValue::toString() const {
+        std::stringstream ss;
+        ss << "[ ";
+        for (const auto& value : m_value) {
+            ss << value->toString();
+            if (value != m_value.back()) {
+                ss << ", ";
+            }
+        }
+        ss << " ]";
+        return ss.str();
+    }
+
+    std::size_t ArrValue::hash() const {
+        std::size_t seed = m_value.size();
+
+        for (const auto& element : m_value) {
+            const std::size_t h = element ? element->hash() : 0x0;
+            seed ^= h + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        }
+
+        return seed;
+    }
+
+    bool ArrValue::equals(const ValuePtr &other) const {
+        if (!other) {
+            return false;
+        }
+        if (getType() == other->getType()) {
+            return m_value == dynamic_cast<ArrValue*>(other.get())->getValue();
+        }
+        return false;
+    }
+
+    bool ArrValue::isTruthy() const {
+        return !m_value.empty();
+    }
+
+    ValuePtr ArrValue::at(const ValuePtr& index) const {
+        if (!index) {
+            return nullptr;
+        }
+        if (index->getType() == ValueType::Integer) {
+            const auto i = dynamic_cast<const IntValue*>(index.get())->getValue();
+            if (!m_value.empty() && i < m_value.size()) {
+                return m_value[i];
+            }
+            return std::make_shared<NullValue>();
+        }
+        return nullptr;
+    }
+
+    std::vector<ValuePtr> ArrValue::getValue() const {
+        return m_value;
+    }
+
+    // #########################################################
+
+    DictValue::DictValue(DictType value) : m_value(std::move(value)) {}
+
+    ValueType DictValue::getType() const {
+        return ValueType::Dict;
+    }
+
+    std::string DictValue::toString() const {
+        if (m_value.empty()) return "{}";
+
+        std::string res = "{";
+        bool first = true;
+        for (const auto& [key, val] : m_value) {
+            if (!first) res += ", ";
+            res += (key ? key->toString() : "null");
+            res += ": ";
+            res += (val ? val->toString() : "null");
+            first = false;
+        }
+        res += "}";
+        return res;
+    }
+
+    std::size_t DictValue::hash() const {
+        std::size_t seed = 0;
+
+        for (const auto& [key, val] : m_value) {
+            std::size_t pair_hash = key ? key->hash() : 0;
+
+            const std::size_t v_hash = val ? val->hash() : 0;
+            pair_hash ^= v_hash + 0x9e3779b9 + (pair_hash << 6) + (pair_hash >> 2);
+
+            seed += pair_hash;
+        }
+
+        return seed;
+    }
+
+    bool DictValue::equals(const ValuePtr &other) const {
+        if (!other) {
+            return false;
+        }
+        if (getType() == other->getType()) {
+            return m_value == dynamic_cast<DictValue*>(other.get())->getValue();
+        }
+        return false;
+    }
+
+    bool DictValue::isTruthy() const {
+        return !m_value.empty();
+    }
+
+    ValuePtr DictValue::at(const ValuePtr& index) const {
+        if (!index) {
+            return nullptr;
+        }
+        if (m_value.contains(index)) {
+            return m_value.at(index);
+        }
+        return nullptr;
+    }
+
+    DictValue::DictType DictValue::getValue() const {
         return m_value;
     }
 
