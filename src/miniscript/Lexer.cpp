@@ -78,6 +78,17 @@ namespace miniscript {
             return {Word::String, std::string(val), start_line, start_col};
         }
 
+        if (c == '\'') {
+            advance(); // opening '
+            const size_t start = m_index;
+            while (peek() != '\'' && !is_at_end()) {
+                advance();
+            }
+            const std::string_view val = m_input.substr(start, m_index - start);
+            if (peek() == '\'') advance(); // closing '
+            return {Word::Character, std::string(val), start_line, start_col};
+        }
+
         advance();
         return {Word::UNKNOWN, std::string(1, c), start_line, start_col};
     }

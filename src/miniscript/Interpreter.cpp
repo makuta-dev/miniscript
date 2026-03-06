@@ -6,10 +6,16 @@ namespace miniscript {
 
     void debug(const std::string& s) {
         std::cout << "[debug] " << s << std::endl;
-    };
+    }
 
-    struct ReturnSignal {
+    struct ReturnSignal : std::exception {
         ValuePtr value;
+
+        explicit ReturnSignal(ValuePtr val) : value(std::move(val)) {}
+
+        [[nodiscard]] const char* what() const noexcept override {
+            return "ReturnSignal: This exception should be caught by a CallNode.";
+        }
     };
 
     void Interpreter::visit(const LiteralNode& l) {
@@ -76,8 +82,9 @@ namespace miniscript {
         m_scope->put(f.name, std::make_shared<UFuncValue>(&f,m_scope));
     }
 
-    void Interpreter::visit(const VariableNode &) {
-
+    void Interpreter::visit(const VariableNode& v) {
+        v.value->accept(*this);
+        m_scope->put(v.name,m_lastValue);
     }
 
     void Interpreter::visit(const BinaryNode &) {
@@ -117,7 +124,7 @@ namespace miniscript {
                 throw std::runtime_error("Runtime Error: Too few arguments for function " + fnAST->name);
             }
 
-            auto callScope = std::make_shared<Scope>(funcValue->getDefinitionScope());
+            const auto callScope = std::make_shared<Scope>(funcValue->getDefinitionScope());
 
             for (size_t i = 0; i < fnAST->arguments.size(); ++i) {
                 auto argName = dynamic_cast<ArgumentNode*>(fnAST->arguments[i].get())->name;
@@ -152,8 +159,17 @@ namespace miniscript {
 
     }
 
-    void Interpreter::visit(const ReturnNode &) {
+    void Interpreter::visit(const ReturnNode& r) {
+        ValuePtr result;
 
+        if (r.variable) {
+            r.variable->accept(*this);
+            result = m_lastValue;
+        } else {
+            result = std::make_shared<NullValue>();
+        }
+
+        throw ReturnSignal{ result };
     }
 
     void Interpreter::visit(const BreakNode &) {

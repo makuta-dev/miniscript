@@ -153,12 +153,22 @@ namespace miniscript {
         }
         consume(Word::RightParen, "Expected ')' after parameters.");
 
-        NodePtr body = parseBlock();
-
         auto funcNode = node<FunctionNode>();
         funcNode->name = nameToken.value;
         funcNode->arguments = std::move(parameters);
-        funcNode->body = std::move(body);
+
+        if (match(Word::Assign)) {
+            auto block = node<BlockNode>();
+            auto returnStmt = node<ReturnNode>();
+
+            auto expr = parseExpression();
+
+            returnStmt->variable = std::move(expr);
+            block->statements.push_back(std::move(returnStmt));
+            funcNode->body = std::move(block);
+        } else {
+            funcNode->body = parseBlock();
+        }
 
         return funcNode;
     }

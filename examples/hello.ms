@@ -1,5 +1,2 @@
-func hello() = "Hello, World"
-
-func main(){
-    println(hello())
-}
+let text = "Hello, World"
+println(text)

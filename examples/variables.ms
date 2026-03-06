@@ -7,3 +7,5 @@ let e = {
     "type" : "dict",
     "value" : false
 }
+
+print(_,a,b,c,d,e)
