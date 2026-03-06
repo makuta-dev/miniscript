@@ -4,8 +4,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include "ASTree.h"
-#include "Value.h"
+#include "miniscript/Value.h"
 
 namespace miniscript {
 
@@ -17,19 +16,13 @@ namespace miniscript {
     public:
         explicit Scope(ScopePtr parent);
 
-        void putVariable(const std::string& name, const ValuePtr& value);
-        void putFunction(const std::string& name, NodePtr value);
-
-        ValuePtr getVariable(const std::string& name);
-        NodePtr getFunction(const std::string& name);
-
-        bool delVariable(const std::string& name);
-        bool delFunction(const std::string& name);
+        void put(const std::string& name, ValuePtr value);
+        ValuePtr get(const std::string& name);
+        bool remove(const std::string& name);
 
     private:
         ScopePtr m_parent;
         std::unordered_map<std::string, ValuePtr> m_variables;
-        std::unordered_map<std::string, NodePtr> m_functions;
     };
 
 }

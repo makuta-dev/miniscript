@@ -11,6 +11,7 @@ add_executable(miniscript
         src/miniscript/Lexer.h
         src/miniscript/Parser.h
         src/miniscript/Scope.h
+        src/miniscript/STDLib.h
         src/miniscript/Token.h
         src/miniscript/Trie.h
         src/miniscript/Value.h
@@ -22,6 +23,7 @@ add_executable(miniscript
         src/miniscript/Lexer.cpp
         src/miniscript/Parser.cpp
         src/miniscript/Scope.cpp
+        src/miniscript/STDLib.cpp
         src/miniscript/Token.cpp
         src/miniscript/Trie.cpp
         src/miniscript/Value.cpp

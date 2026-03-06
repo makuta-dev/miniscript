@@ -7,7 +7,14 @@
 #include <unordered_map>
 #include <vector>
 
+//#include "Scope.h"
+#include "miniscript/ASTree.h"
+
 namespace miniscript {
+
+    class Scope;
+
+    using ScopePtr = std::shared_ptr<Scope>;
 
     enum class ValueType {
         Null,
@@ -18,7 +25,8 @@ namespace miniscript {
         String,
         Array,
         Dict,
-        Function
+        Func,
+        NativeFunc
     };
 
     struct IValue;
@@ -191,6 +199,23 @@ namespace miniscript {
 
     private:
         NativeFn m_value;
+    };
+
+    struct UFuncValue final : IValue {
+        explicit UFuncValue(const FunctionNode* value, ScopePtr scope);
+
+        [[nodiscard]] ValueType getType() const override;
+        [[nodiscard]] std::string toString() const override;
+        [[nodiscard]] std::size_t hash() const override;
+        [[nodiscard]] bool equals(const ValuePtr &other) const override;
+        [[nodiscard]] bool isTruthy() const override;
+
+        [[nodiscard]] const FunctionNode* getValue() const;
+        [[nodiscard]] ScopePtr getDefinitionScope() const;
+
+    private:
+        const FunctionNode* m_value;
+        ScopePtr m_scope;
     };
 
 }

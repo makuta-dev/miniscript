@@ -3,6 +3,8 @@
 #include <sstream>
 #include <utility>
 
+#include "Scope.h"
+
 namespace miniscript {
     ValueType NullValue::getType() const {
         return ValueType::Null;
@@ -348,7 +350,7 @@ namespace miniscript {
     FuncValue::FuncValue(NativeFn value) : m_value(std::move(value)) {}
 
     ValueType FuncValue::getType() const {
-        return ValueType::Function;
+        return ValueType::NativeFunc;
     }
 
     std::string FuncValue::toString() const {
@@ -369,6 +371,41 @@ namespace miniscript {
 
     FuncValue::NativeFn FuncValue::getValue() const {
         return m_value;
+    }
+
+    // #########################################################
+
+    UFuncValue::UFuncValue(const FunctionNode* value, ScopePtr scope) : m_value(value), m_scope(std::move(scope)) {}
+
+    ValueType UFuncValue::getType() const {
+        return ValueType::Func;
+    }
+
+    std::string UFuncValue::toString() const {
+        return "<function>";
+    }
+
+    std::size_t UFuncValue::hash() const {
+        return 0;
+    }
+
+    bool UFuncValue::equals(const ValuePtr &other) const {
+        if (other != nullptr && other->getType() == ValueType::Func) {
+            return m_value == dynamic_cast<UFuncValue*>(other.get())->getValue();
+        }
+        return false;
+    }
+
+    bool UFuncValue::isTruthy() const {
+        return true;
+    }
+
+    const FunctionNode* UFuncValue::getValue() const {
+        return m_value;
+    }
+
+    ScopePtr UFuncValue::getDefinitionScope() const {
+        return m_scope;
     }
 
 }
