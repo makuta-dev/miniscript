@@ -58,4 +58,14 @@ namespace miniscript::stdlib {
         return NullValue::instance();
     }
 
+    ValuePtr help(const std::vector<ValuePtr>&) {
+        std::cout << "stdlib functions" << std::endl;
+        std::cout << std::endl;
+        std::cout << "print         output into stdout" << std::endl;
+        std::cout << "println       output into stdout with newline append" << std::endl;
+        std::cout << "int           cast to int number" << std::endl;
+        std::cout << "real          cast to real number" << std::endl;
+        return NullValue::instance();
+    }
+
 }

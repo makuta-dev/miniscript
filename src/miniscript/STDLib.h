@@ -5,6 +5,7 @@
 
 namespace miniscript::stdlib {
 
+    ValuePtr help(const std::vector<ValuePtr>& args);
     ValuePtr print(const std::vector<ValuePtr>& args);
     ValuePtr println(const std::vector<ValuePtr>& args);
     ValuePtr toInt(const std::vector<ValuePtr>& args);

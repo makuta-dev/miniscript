@@ -6,10 +6,11 @@
 namespace miniscript {
 
     Scope::Scope(ScopePtr parent) : m_parent(std::move(parent)) {
-        m_variables.emplace("print", std::make_shared<FuncValue>(stdlib::print));
-        m_variables.emplace("println", std::make_shared<FuncValue>(stdlib::println));
-        m_variables.emplace("int", std::make_shared<FuncValue>(stdlib::toInt));
-        m_variables.emplace("real", std::make_shared<FuncValue>(stdlib::toReal));
+        m_variables.emplace("help",     std::make_shared<FuncValue>(stdlib::help)   );
+        m_variables.emplace("print",    std::make_shared<FuncValue>(stdlib::print)  );
+        m_variables.emplace("println",  std::make_shared<FuncValue>(stdlib::println));
+        m_variables.emplace("int",      std::make_shared<FuncValue>(stdlib::toInt)  );
+        m_variables.emplace("real",     std::make_shared<FuncValue>(stdlib::toReal) );
     }
 
     void Scope::put(const std::string& name, ValuePtr value) {
