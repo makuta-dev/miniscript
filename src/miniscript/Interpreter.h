@@ -2,10 +2,11 @@
 #define MINISCRIPT_INTERPRETER_H
 
 #include "miniscript/ASTree.h"
+#include "miniscript/Scope.h"
 
 namespace miniscript {
 
-    class Interpreter final : public Visitor{
+    class Interpreter final : public Visitor {
     public:
         void visit(const LiteralNode &) override;
         void visit(const ArrayLiteralNode &) override;
@@ -26,6 +27,12 @@ namespace miniscript {
         void visit(const BlockNode &) override;
         void visit(const ImportNode &) override;
         void visit(const IfNode&) override;
+
+    private:
+        ValuePtr evaluate(ASTNode* node);
+
+        ScopePtr m_scope;
+        ValuePtr m_lastValue;
     };
 
 }

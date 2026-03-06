@@ -11,7 +11,7 @@ namespace miniscript {
 
     class Scope;
 
-    using ScopePtr = std::unique_ptr<Scope>;
+    using ScopePtr = std::shared_ptr<Scope>;
 
     class Scope final {
     public:

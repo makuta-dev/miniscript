@@ -23,6 +23,11 @@ namespace miniscript {
         return getType() == other->getType();
     }
 
+    ValuePtr NullValue::instance() {
+        static auto nullValue = std::make_shared<NullValue>();
+        return nullValue;
+    }
+
     // #########################################################
 
     BoolValue::BoolValue(const bool value) : m_value(value) {}
@@ -194,8 +199,8 @@ namespace miniscript {
             return nullptr;
         }
         if (index->getType() == ValueType::Integer) {
-            const auto i = dynamic_cast<const IntValue*>(index.get())->getValue();
-            if (!m_value.empty() && i < m_value.length()) {
+            if (const auto i = dynamic_cast<const IntValue*>(index.get())->getValue();
+                !m_value.empty() && i < m_value.length()) {
                 return std::make_shared<CharValue>(m_value[i]);
             }
             return std::make_shared<NullValue>();
@@ -258,8 +263,8 @@ namespace miniscript {
             return nullptr;
         }
         if (index->getType() == ValueType::Integer) {
-            const auto i = dynamic_cast<const IntValue*>(index.get())->getValue();
-            if (!m_value.empty() && i < m_value.size()) {
+            if (const auto i = dynamic_cast<const IntValue*>(index.get())->getValue();
+                !m_value.empty() && i < m_value.size()) {
                 return m_value[i];
             }
             return std::make_shared<NullValue>();
@@ -286,9 +291,9 @@ namespace miniscript {
         bool first = true;
         for (const auto& [key, val] : m_value) {
             if (!first) res += ", ";
-            res += (key ? key->toString() : "null");
+            res += key ? key->toString() : "null";
             res += ": ";
-            res += (val ? val->toString() : "null");
+            res += val ? val->toString() : "null";
             first = false;
         }
         res += "}";
@@ -335,6 +340,34 @@ namespace miniscript {
     }
 
     DictValue::DictType DictValue::getValue() const {
+        return m_value;
+    }
+
+    // #########################################################
+
+    FuncValue::FuncValue(NativeFn value) : m_value(std::move(value)) {}
+
+    ValueType FuncValue::getType() const {
+        return ValueType::Function;
+    }
+
+    std::string FuncValue::toString() const {
+        return "<native function>";
+    }
+
+    std::size_t FuncValue::hash() const {
+        return 0;
+    }
+
+    bool FuncValue::equals(const ValuePtr &other) const {
+        return false;
+    }
+
+    bool FuncValue::isTruthy() const {
+        return true;
+    }
+
+    FuncValue::NativeFn FuncValue::getValue() const {
         return m_value;
     }
 

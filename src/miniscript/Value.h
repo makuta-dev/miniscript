@@ -1,6 +1,7 @@
 #ifndef MINISCRIPT_VALUE_H
 #define MINISCRIPT_VALUE_H
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -16,7 +17,8 @@ namespace miniscript {
         Real,
         String,
         Array,
-        Dict
+        Dict,
+        Function
     };
 
     struct IValue;
@@ -60,6 +62,8 @@ namespace miniscript {
         [[nodiscard]] std::string toString() const override;
         [[nodiscard]] std::size_t hash() const override;
         [[nodiscard]] bool equals(const ValuePtr &other) const override;
+
+        static ValuePtr instance();
     };
 
     struct BoolValue final : IValue {
@@ -170,6 +174,23 @@ namespace miniscript {
 
     private:
         DictType m_value;
+    };
+
+    struct FuncValue final : IValue {
+        using NativeFn = std::function<ValuePtr(const std::vector<ValuePtr>&)>;
+
+        explicit FuncValue(NativeFn value);
+
+        [[nodiscard]] ValueType getType() const override;
+        [[nodiscard]] std::string toString() const override;
+        [[nodiscard]] std::size_t hash() const override;
+        [[nodiscard]] bool equals(const ValuePtr &other) const override;
+        [[nodiscard]] bool isTruthy() const override;
+
+        [[nodiscard]] NativeFn getValue() const;
+
+    private:
+        NativeFn m_value;
     };
 
 }

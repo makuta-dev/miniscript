@@ -78,4 +78,10 @@ namespace miniscript {
 
     }
 
+    ValuePtr Interpreter::evaluate(ASTNode* node) {
+        if (!node) return NullValue::instance();
+        node->accept(*this);
+        return m_lastValue;
+    }
+
 }
