@@ -5,7 +5,7 @@
 namespace miniscript {
 
     void debug(const std::string& s) {
-        std::cout << "[debug] " << s << std::endl;
+    //    std::cout << "[debug] " << s << std::endl;
     }
 
     struct ReturnSignal : std::exception {
@@ -39,7 +39,7 @@ namespace miniscript {
             case Word::Number:
                 if (l.token.value.contains('.')) {
                     m_lastValue = std::make_shared<RealValue>(std::stod(l.token.value));
-                }else {
+                } else {
                     m_lastValue = std::make_shared<IntValue>(std::stoi(l.token.value));
                 }
                 break;
@@ -83,6 +83,7 @@ namespace miniscript {
     }
 
     void Interpreter::visit(const VariableNode& v) {
+        debug("variable");
         v.value->accept(*this);
         m_scope->put(v.name,m_lastValue);
     }
@@ -160,6 +161,7 @@ namespace miniscript {
     }
 
     void Interpreter::visit(const ReturnNode& r) {
+        debug("return");
         ValuePtr result;
 
         if (r.variable) {
@@ -180,8 +182,12 @@ namespace miniscript {
 
     }
 
-    void Interpreter::visit(const IndexNode &) {
-
+    void Interpreter::visit(const IndexNode& i) {
+        debug("index");
+        i.variable->accept(*this);
+        const auto callee = m_lastValue;
+        i.index->accept(*this);
+        m_lastValue = callee->at(m_lastValue);
     }
 
     void Interpreter::visit(const BlockNode& b) {
