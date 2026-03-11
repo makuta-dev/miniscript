@@ -63,7 +63,7 @@ namespace ms {
         for (;;) {
             switch (peek()) {
                 case ' ': case '\r': case '\t': advance(); break;
-                case '\n': m_line++; advance(); break;
+                case '\n': m_line++; m_column = 1; advance(); break;
                 case '/':
                     if (m_input[m_index+1] == '/') {
                         while (peek() != '\n' && !isAtEnd()) advance();
