@@ -4,14 +4,14 @@
 
 namespace ms {
 
-    Lexer::Lexer(const std::string_view input) : m_input(input) {}
+    Lexer::Lexer(const std::string_view input, const int line) : m_input(input), m_line(line) {}
 
     bool Lexer::nextToken(Token& t) {
         skipWhitespace();
-        start = m_index;
+        m_start = m_index;
 
         if (isAtEnd()) {
-            t = { Word::EndOfFile, "", line, column };
+            t = { Word::EndOfFile, "", m_line, m_column };
             return false;
         }
 
@@ -45,7 +45,7 @@ namespace ms {
     }
 
     char Lexer::advance() {
-        column++;
+        m_column++;
         return m_input[m_index++];
     }
 
@@ -63,7 +63,7 @@ namespace ms {
         for (;;) {
             switch (peek()) {
                 case ' ': case '\r': case '\t': advance(); break;
-                case '\n': line++; advance(); break;
+                case '\n': m_line++; advance(); break;
                 case '/':
                     if (m_input[m_index+1] == '/') {
                         while (peek() != '\n' && !isAtEnd()) advance();
@@ -77,7 +77,7 @@ namespace ms {
     Token Lexer::lexIdentifier() {
         while (std::isalnum(peek()) || peek() == '_') advance();
 
-        std::string_view text = m_input.substr(start, m_index - start);
+        std::string_view text = m_input.substr(m_start, m_index - m_start);
         auto type = Word::Identifier;
 
         static const std::unordered_map<std::string_view, Word> keywords = {
@@ -102,7 +102,7 @@ namespace ms {
             text = "";
         }
 
-        return {type, text, line, column};
+        return {type, text, m_line, m_column};
     }
 
     Token Lexer::lexOperator() {
@@ -181,7 +181,7 @@ namespace ms {
                 return new_token(match('=') ? Word::GreaterEquals : Word::Greater);
             }
             default:
-                return { Word::UNKNOWN, m_input.substr(start, 1), line, column };
+                return { Word::UNKNOWN, m_input.substr(m_start, 1), m_line, m_column };
         }
     }
 
@@ -194,13 +194,13 @@ namespace ms {
                 advance();
         }
 
-        const std::string_view text = m_input.substr(start, m_index - start);
-        return {Word::Number, text, line, column};
+        const std::string_view text = m_input.substr(m_start, m_index - m_start);
+        return {Word::Number, text, m_line, m_column};
     }
 
     Token Lexer::lexString() {
-        const int startLine = line;
-        const int startColumn = column;
+        const int startLine = m_line;
+        const int startColumn = m_column;
 
         advance();
         const std::size_t content_start = m_index;
@@ -223,7 +223,7 @@ namespace ms {
                 if (brace_stack > 0) brace_stack--;
                 advance();
             } else {
-                if (c == '\n') { line++; column = 1; }
+                if (c == '\n') { m_line++; m_column = 1; }
                 advance();
             }
         }
@@ -237,6 +237,6 @@ namespace ms {
     }
 
     Token Lexer::new_token(const Word word, const char *str) const {
-        return {word, str, line, column};
+        return {word, str, m_line, m_column};
     }
 }
