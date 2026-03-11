@@ -1,6 +1,8 @@
 #ifndef MINISCRIPT_WORD_H
 #define MINISCRIPT_WORD_H
 
+#include <string>
+
 namespace ms {
 
     enum class Word {
@@ -88,6 +90,8 @@ namespace ms {
         PlusPlus,
         MinusMinus,
     };
+
+    std::string toString(Word);
 
 }
 

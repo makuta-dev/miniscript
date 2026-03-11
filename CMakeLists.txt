@@ -13,6 +13,8 @@ add_executable(miniscript
         src/main.cpp
         src/miniscript/Word.cpp
         src/miniscript/Word.h
+        src/miniscript/Token.cpp
+        src/miniscript/Token.h
 )
 
 target_include_directories(miniscript PRIVATE src)
