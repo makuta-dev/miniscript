@@ -11,20 +11,25 @@ namespace ms {
 
         Identifier,
         String,
+        StringInterpolation,
         Number,
 
         Function,
         Continue,
         Return,
+        Const,
         While,
+        Match,
         Break,
         False,
         True,
+        Else,
         Null,
         Let,
         For,
         Do,
         In,
+        If,
 
         LeftParen,
         RightParen,
@@ -66,7 +71,6 @@ namespace ms {
         BitOrAssign,
         BitXorAssign,
 
-        NotAssign,
         InvAssign,
 
         PlusAssign,
@@ -91,7 +95,7 @@ namespace ms {
         MinusMinus,
     };
 
-    std::string toString(Word);
+    std::string toString(const Word&);
 
 }
 

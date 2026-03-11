@@ -7,7 +7,7 @@ namespace ms {
 
     struct Token final {
         Word word;
-        std::string value;
+        std::string_view value;
         int line;
         int column;
     };
