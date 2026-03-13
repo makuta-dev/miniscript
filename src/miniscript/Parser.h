@@ -1,8 +1,8 @@
 #ifndef MINISCRIPT_PARSER_H
 #define MINISCRIPT_PARSER_H
 
-#include "miniscript/ASTree.h"
-#include "miniscript/Token.h"
+#include "ASTree.h"
+#include "Token.h"
 
 namespace ms {
 

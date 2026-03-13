@@ -8,18 +8,10 @@
 #include "miniscript/Printer.h"
 
 void compile(const std::string& path) {
-    std::cout << "Path: " << path << std::endl;
-
-    ms::Token t{};
     const auto content = (std::stringstream() << std::ifstream(path).rdbuf()).str();
-    auto tokens = std::vector<ms::Token>();
-    auto lexer = ms::Lexer(content);
-    while (lexer.nextToken(t)) {
-        tokens.push_back(t);
-    }
-    auto parser = ms::Parser(tokens);
-    auto printer = ms::Printer();
-    if (const auto ast_root = parser.parse()){
+    const auto tokens = ms::Lexer(content).getTokens();
+    if (const auto ast_root = ms::Parser(tokens).parse()){
+        auto printer = ms::Printer();
         ast_root->accept(printer);
     } else {
         std::cout << "Bad AST" << std::endl;
@@ -27,6 +19,8 @@ void compile(const std::string& path) {
 }
 
 int main() {
-    compile(std::string(EXAMPLES_DIR) + "/variables.ms");
+    compile("/tmp/temp.ms");
     return 0;
 }
+
+// std::string(EXAMPLES_DIR)

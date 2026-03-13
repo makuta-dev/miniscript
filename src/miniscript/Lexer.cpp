@@ -36,6 +36,15 @@ namespace ms {
         return true;
     }
 
+    std::vector<Token> Lexer::getTokens() {
+        std::vector<Token> tokens;
+        Token token;
+        while (nextToken(token)) {
+            tokens.push_back(token);
+        }
+        return tokens;
+    }
+
     bool Lexer::isAtEnd() const {
         return m_index >= m_input.size();
     }

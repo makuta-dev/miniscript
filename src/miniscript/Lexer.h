@@ -2,6 +2,7 @@
 #define MINISCRIPT_LEXER_H
 
 #include <string_view>
+#include <vector>
 
 #include "miniscript/Token.h"
 
@@ -11,6 +12,7 @@ namespace ms {
     public:
         explicit Lexer(std::string_view, int line = 1);
         bool nextToken(Token&);
+        std::vector<Token> getTokens();
 
     private:
         [[nodiscard]] bool isAtEnd() const;
