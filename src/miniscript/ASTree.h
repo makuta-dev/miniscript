@@ -22,6 +22,11 @@ namespace ms {
 
     using NodePtr = std::unique_ptr<ASTNode>;
 
+    template <typename T, typename... Args>
+    std::unique_ptr<T> node(Args... args) {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
+
     struct ProgramNode : ASTNode {
         std::vector<NodePtr> declarations;
 

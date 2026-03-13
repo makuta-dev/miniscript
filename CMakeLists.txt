@@ -18,6 +18,10 @@ add_executable(miniscript
 
         src/main.cpp
         src/miniscript/ASTree.h
+        src/miniscript/Parser.cpp
+        src/miniscript/Parser.h
+        src/miniscript/Printer.cpp
+        src/miniscript/Printer.h
 )
 
 target_include_directories(miniscript PRIVATE src)
